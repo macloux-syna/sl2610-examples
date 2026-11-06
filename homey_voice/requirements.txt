@@ -1,0 +1,5 @@
+# Extras to install alongside ../requirements.txt in the repository venv.
+sounddevice>=0.4
+silero-vad-notorch
+tokenizers
+soundfile

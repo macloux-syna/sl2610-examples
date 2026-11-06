@@ -1,0 +1,19 @@
+[Unit]
+Description=Homey English voice control on SL2610
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Adjust all paths and User for your board. This starts in PREVIEW mode.
+User=root
+WorkingDirectory=/home/root/sl2610-examples/homey_voice
+EnvironmentFile=/home/root/sl2610-examples/homey_voice/homey_voice.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/root/sl2610-examples/.venv/bin/python /home/root/sl2610-examples/homey_voice/run_cli.py --voice
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target

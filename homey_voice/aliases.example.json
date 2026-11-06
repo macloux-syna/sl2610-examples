@@ -1,0 +1,8 @@
+{
+  "desk lamp": "REPLACE_WITH_DEVICE_ID",
+  "living room lamps": [
+    "REPLACE_WITH_FIRST_LIGHT_ID",
+    "REPLACE_WITH_SECOND_LIGHT_ID"
+  ],
+  "sonos": "REPLACE_WITH_SONOS_DEVICE_ID"
+}
