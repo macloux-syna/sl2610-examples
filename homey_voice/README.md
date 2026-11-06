@@ -162,37 +162,18 @@ Use exact Homey names, room + device names, or configured aliases:
 - `set Hall thermostat to twenty-one point five degrees`
 - `status of Desk lamp`
 - `turn off all lights in the living room`
-- `play Sonos`
-- `pause Sonos`
-- `volume up on Sonos`
-- `volume down on Sonos`
+- `play Living room speaker`
+- `pause Living room speaker`
+- `volume up on Living room speaker`
+- `volume down on Bedroom speaker`
+
+Speaker commands require the device name, room + device name, or a spoken alias such as `pause Living room speaker`. Commands without a speaker name are rejected; there is no automatic default selection. Playback resumes or pauses the current queue. Volume changes use a native step when available, otherwise five percentage points within the supported range. All commands use preview mode unless `--execute` is enabled.
 
 Lights, sockets, brightness, Celsius thermostat targets, speaker playback/volume, and device status are supported. Device metadata determines supported capabilities, limits, steps, and availability. Duplicate names require room qualification or aliases. Room groups include directly assigned lights, not nested subrooms. A bare “lights” must be an actual device name or alias; “all lights” explicitly selects a group.
 
 Colors, blinds, locks, flows, timers, relative brightness/temperature adjustments, and compound commands are not implemented. The constrained parser accepts documented command forms and common spoken numbers; it is not an open-ended conversational assistant. Homey integrations can still rely on their manufacturers' cloud services even though speech inference runs locally.
 
 Group writes are prevalidated and then sequential. If a write fails, completed devices are listed and remaining writes stop. Calls are not atomic, and a timeout may mean the write reached Homey; it is not retried automatically. A successful response means Homey accepted the request, not verified physical actuation.
-
-## Sonos playback and volume
-
-Pair your Sonos speakers with Homey using the Sonos integration first. Run `python homey_voice/run_cli.py --list` to find their exact names and IDs. Use a device name, room + name, or define an alias such as `"sonos": "YOUR_SONOS_DEVICE_ID"` in `aliases.json`. Commands require a named speaker or alias; they do not guess a default room.
-
-Examples with the `sonos` alias:
-
-```bash
-python homey_voice/run_cli.py --prompt "play Sonos"
-python homey_voice/run_cli.py --prompt "pause Sonos"
-python homey_voice/run_cli.py --prompt "volume up on Sonos"
-python homey_voice/run_cli.py --prompt "volume down on Sonos"
-```
-
-These preview the action. Add `--execute` to send it to Homey. The same phrases work while listening in voice mode. Alternative forms include `resume Sonos`, `play music on Sonos`, `turn up the volume on Sonos`, `turn Sonos volume down`, `volumeup Sonos`, and `volumedown Sonos`.
-
-Play resumes the speaker's current playback/queue; it does not select a song or music service. Pause pauses that playback. Existing Sonos grouping behavior is controlled by Homey and Sonos.
-
-The app uses the speaker's Homey capabilities: `speaker_playing` for play/pause and `volume_up`/`volume_down` for one native volume step. If a native volume button is unavailable, it adjusts the current `volume_set` slider by five percentage points, rounded to the device's supported step and clamped to its reported limits. A missing/unknown volume level or read-only capability produces a visible error instead of guessing a level. These controls use the existing Homey device permissions and do not require a separate Sonos credential.
-
-Capability references: [Homey volume up](https://raw.githubusercontent.com/athombv/node-homey-lib/master/assets/capability/capabilities/volume_up.json), [volume down](https://raw.githubusercontent.com/athombv/node-homey-lib/master/assets/capability/capabilities/volume_down.json), [volume slider](https://raw.githubusercontent.com/athombv/node-homey-lib/master/assets/capability/capabilities/volume_set.json), and [Homey media capabilities](https://apps.developer.homey.app/the-basics/devices/capabilities).
 
 ## Startup service
 

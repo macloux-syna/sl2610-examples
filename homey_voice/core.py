@@ -116,6 +116,13 @@ class Intent:
 def parse(text):
     text = normalize(text.strip().rstrip('.!?'))
     text = re.sub(r'^please\s+|\s+please$', '', text)
+    if re.fullmatch(
+            r'(?:play|resume|pause)(?: music)?|'
+            r'(?:turn )?(?:the )?volume[ -]?(?:up|down)|'
+            r'turn (?:up|down) (?:the )?volume|'
+            r'(?:increase|raise|decrease|lower) (?:the )?volume', text):
+        raise ControlError('Include the speaker name, for example “play Living room speaker” '
+                           'or “volume up on Living room speaker”.')
     m = re.fullmatch(r'(play|resume|pause)(?: music)?(?: on)? (.+)', text)
     if m:
         return Intent(target_text(m[2]), 'speaker_playing', m[1] != 'pause')
@@ -155,8 +162,8 @@ def parse(text):
     if m:
         return Intent(target_text(m[1]))
     raise ControlError('Try “turn on Desk lamp”, “set Desk lamp to 50 percent”, '
-                       '“play Sonos”, “pause Sonos”, “volume up on Sonos”, '
-                       'or “volume down on Sonos”. Use your actual device name or alias.')
+                       '“play Living room speaker”, “pause Living room speaker”, '
+                       'or “volume up on Living room speaker”.')
 
 
 def resolve(target, devices, zones, aliases=None):
